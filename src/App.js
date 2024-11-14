@@ -3,14 +3,14 @@ import "./index.css";
 import SearchIcon from "./search.svg";
 import MovieCard from "./components/MovieCard";
 
-const APIKEY = "https://www.omdbapi.com?apikey=47db0eac";
+const APIKEY = process.env.REACT_APP_OMDB_API_KEY;
+const API_URL = `https://www.omdbapi.com/?apikey=${APIKEY}`;
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
   const searchMovies = async (title) => {
     try {
-      const res = await fetch(`${APIKEY}&s=${title}`);
+      const res = await fetch(`${API_URL}&s=${title}`);
       const data = await res.json();
       if (data.Response === "True") {
         setMovies(data.Search);
@@ -49,7 +49,7 @@ const App = () => {
       {movies.length > 0 ? (
         <div className='container'>
           {movies.map((movie) => (
-            <MovieCard movie={movie} />
+            <MovieCard key={movie.imdbID} movie={movie} />
           ))}
         </div>
       ) : (
